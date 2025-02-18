@@ -7,6 +7,7 @@
     "python.testing.pytestEnabled": true,
     "editor.formatOnSave": true,
     "testing.defaultGutterClickAction": "debug",
+    "python.analysis.inlayHints.pytestParameters": true,
     "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
     "isort.args": [
         "--settings-path=${workspaceFolder}/pyproject.toml"
