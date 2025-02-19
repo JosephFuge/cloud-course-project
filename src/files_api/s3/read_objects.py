@@ -1,6 +1,5 @@
 """Functions for reading objects from an S3 bucket--the "R" in CRUD."""
 
-import json
 from typing import (
     Any,
     Dict,
