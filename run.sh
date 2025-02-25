@@ -21,7 +21,7 @@ function install {
 }
 
 function run {
-    AWS_PROFILE=cloud-course uvicorn files_api.main:APP --reload
+    AWS_PROFILE=cloud-course S3_BUCKET_NAME="some-bucket" uvicorn files_api.main:create_app --reload
 }
 
 function run-mock {
@@ -33,12 +33,13 @@ function run-mock {
     export AWS_ENDPOINT_URL="http://localhost:5000"
     export AWS_SECRET_ACCESS_KEY="mock"
     export AWS_ACCESS_KEY_ID="mock"
+    export S3_BUCKET_NAME="some-bucket"
 
-    aws s3 mb s3://some-bucket
+    aws s3 mb "s3://$S3_BUCKET_NAME"
 
     trap 'kill $MOTO_PID' EXIT
 
-    uvicorn files_api.main:APP --reload
+    uvicorn files_api.main:create_app --reload
 
     wait $MOTO_PID
 }
