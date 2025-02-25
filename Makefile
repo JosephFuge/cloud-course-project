@@ -16,6 +16,9 @@ help:
 install:
 	bash run.sh install
 
+run:
+	bash run.sh run
+
 lint:
 	bash run.sh lint
 

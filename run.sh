@@ -20,6 +20,10 @@ function install {
     python -m pip install --editable "$THIS_DIR/[dev]"
 }
 
+function run {
+    uvicorn files_api.main:APP --reload
+}
+
 # run linting, formatting, and other static code quality tools
 function lint {
     pre-commit run --all-files
