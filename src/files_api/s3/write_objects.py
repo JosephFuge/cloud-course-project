@@ -28,9 +28,9 @@ def upload_s3_object(
     """
     s3_client = s3_client or boto3.client("s3")
     content_type = content_type or "application/octet-stream"
-    s3_client.put_object(
+    print(s3_client.put_object(
         Bucket=bucket_name,
         Key=object_key,
         Body=file_content,
         ContentType=content_type,
-    )
+    ))

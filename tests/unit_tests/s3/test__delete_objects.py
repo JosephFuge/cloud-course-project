@@ -1,9 +1,11 @@
 from moto import mock_aws
 
+from files_api.main import S3_BUCKET_NAME as TEST_BUCKET_NAME
 from files_api.s3.delete_objects import delete_s3_object
 from files_api.s3.read_objects import object_exists_in_s3
 from files_api.s3.write_objects import upload_s3_object
-from tests.consts import TEST_BUCKET_NAME
+
+# from tests.consts import TEST_BUCKET_NAME
 
 
 @mock_aws

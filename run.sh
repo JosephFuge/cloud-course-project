@@ -21,7 +21,26 @@ function install {
 }
 
 function run {
+    AWS_PROFILE=cloud-course uvicorn files_api.main:APP --reload
+}
+
+function run-mock {
+    set +e
+
+    python -m moto.server -p 5000 &
+    MOTO_PID=$!
+
+    export AWS_ENDPOINT_URL="http://localhost:5000"
+    export AWS_SECRET_ACCESS_KEY="mock"
+    export AWS_ACCESS_KEY_ID="mock"
+
+    aws s3 mb s3://some-bucket
+
+    trap 'kill $MOTO_PID' EXIT
+
     uvicorn files_api.main:APP --reload
+
+    wait $MOTO_PID
 }
 
 # run linting, formatting, and other static code quality tools

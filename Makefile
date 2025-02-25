@@ -19,6 +19,9 @@ install:
 run:
 	bash run.sh run
 
+run-mock:
+	bash run.sh run-mock
+
 lint:
 	bash run.sh lint
 
