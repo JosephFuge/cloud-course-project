@@ -1,6 +1,3 @@
-import os
-from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
-
 from fastapi import FastAPI
 
 from files_api.routes import ROUTER

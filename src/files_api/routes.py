@@ -1,6 +1,7 @@
 from fastapi import (
     APIRouter,
     Depends,
+    HTTPException,
     Request,
     Response,
     UploadFile,
@@ -22,6 +23,7 @@ from files_api.schemas import (
     GetFilesResponse,
     PutFileResponse,
 )
+from files_api.settings import Settings
 
 ROUTER = APIRouter()
 
@@ -116,6 +118,11 @@ async def get_file_metadata(
     
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
+
+    object_exists = object_exists_in_s3(bucket_name=settings.s3_bucket_name, object_key=file_path)
+    if not object_exists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
+
     obj = fetch_s3_object(
         bucket_name=s3_bucket_name,
         object_key=file_path
@@ -133,6 +140,20 @@ async def get_file(
     file_path: str,
 ):
     """Retrieve a file."""
+
+    # 1 - Business logic: errors that the user can fix
+    # error case: object does not exist in the bucket
+    # error case: invalid inputs
+    
+    # 2 - errors that the user cannot fix
+    # error case: not authenticated/authorized to make calls to AWS
+    # error case: the bucket does not exist
+    settings: Settings = request.app.state.settings
+
+    object_exists = object_exists_in_s3(bucket_name=settings.s3_bucket_name, object_key=file_path)
+    if not object_exists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
+
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
     obj_response = fetch_s3_object(bucket_name=s3_bucket_name, object_key=file_path)
@@ -153,6 +174,11 @@ async def delete_file(
     NOTE: DELETE requests MUST NOT return a body in the response."""
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
+
+    object_exists = object_exists_in_s3(bucket_name=s3_bucket_name, object_key=file_path)
+    if not object_exists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
+
     delete_s3_object(bucket_name=s3_bucket_name, object_key=file_path)
 
     response.status_code = status.HTTP_204_NO_CONTENT

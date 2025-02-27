@@ -4,21 +4,13 @@ from fastapi import status
 from fastapi.testclient import TestClient
 
 from files_api.s3.read_objects import object_exists_in_s3
-from files_api.settings import Settings
-from src.files_api.main import create_app
 from tests.consts import TEST_BUCKET_NAME
 
 TEST_FILE_PATH = "some/file.txt"
 TEST_FILE_CONTENT = b"some content"
 TEST_FILE_CONTENT_TYPE = "text/plain"
 
-# Fixture for FastAPI test client
-@pytest.fixture
-def client(mocked_aws) -> TestClient:  # type: ignore # pylint: disable=unused-argument
-    settings = Settings(s3_bucket_name=TEST_BUCKET_NAME)
-    app = create_app(settings=settings)
-    with TestClient(app) as client:
-        yield client
+
 
 
 def test_upload_file(client: TestClient): 
@@ -112,8 +104,4 @@ def test_delete_file(client: TestClient):
     obj_exists = object_exists_in_s3(TEST_BUCKET_NAME, TEST_FILE_PATH)
     print(f"Object exists after deletion: {obj_exists}")
     assert not obj_exists
-
-    # Answer key solution:
-    with pytest.raises(botocore.exceptions.ClientError):
-        response = client.get(f"/files/{TEST_FILE_PATH}")
 
