@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Depends,
     HTTPException,
+    Path,
     Request,
     Response,
     UploadFile,
@@ -137,7 +138,7 @@ async def get_file_metadata(
 @ROUTER.get("/files/{file_path:path}")
 async def get_file(
     request: Request,
-    file_path: str,
+    file_path: str = Path(pattern=r"^([\w\d\s\-.]+/)*([\w\d\s\-.])+\.\w+$"),
 ):
     """Retrieve a file."""
 
