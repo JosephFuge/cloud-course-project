@@ -14,10 +14,7 @@ def test__upload_s3_object(mocked_aws: None):
     file_content: bytes = b"Hello, world!"
     content_type = "text/plain"
     upload_s3_object(
-        bucket_name=TEST_BUCKET_NAME,
-        object_key=object_key,
-        file_content=file_content,
-        content_type=content_type
+        bucket_name=TEST_BUCKET_NAME, object_key=object_key, file_content=file_content, content_type=content_type
     )
 
     # Check that the file was uploaded with the correct content type

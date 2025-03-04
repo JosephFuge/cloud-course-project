@@ -36,10 +36,10 @@ def object_exists_in_s3(bucket_name: str, object_key: str, s3_client: Optional["
     try:
         s3_client = s3_client or boto3.client("s3")
         obj = s3_client.get_object(Bucket=bucket_name, Key=object_key)
-        obj.get('Body')
+        obj.get("Body")
     except botocore.exceptions.ClientError as e:
-        error_code = e.response['Error']['Code']
-        if error_code == '404' or error_code == 'NoSuchKey':
+        error_code = e.response["Error"]["Code"]
+        if error_code == "404" or error_code == "NoSuchKey":
             return False
 
     return True
@@ -84,11 +84,13 @@ def fetch_s3_objects_using_page_token(
     """
     s3_client = s3_client or boto3.client("s3")
     max_keys = max_keys or DEFAULT_MAX_KEYS
-    paginator = s3_client.get_paginator('list_objects_v2')
-    page_iterator = paginator.paginate(Bucket=bucket_name, PaginationConfig={'MaxItems': max_keys, 'StartingToken': continuation_token})
+    paginator = s3_client.get_paginator("list_objects_v2")
+    page_iterator = paginator.paginate(
+        Bucket=bucket_name, PaginationConfig={"MaxItems": max_keys, "StartingToken": continuation_token}
+    )
 
-    object_data = list(flatten([page['Contents'] for page in page_iterator]))
-        
+    object_data = list(flatten([page["Contents"] for page in page_iterator]))
+
     return (object_data, str(page_iterator.resume_token))
 
 
@@ -116,7 +118,10 @@ def fetch_s3_objects_metadata(
     params: Dict[str, Any] = {}
     if prefix is not None:
         params["Prefix"] = prefix
-    
+
     objects_metadata = s3_client.list_objects_v2(Bucket=bucket_name, MaxKeys=max_keys, **params)
-    
-    return (objects_metadata['Contents'], objects_metadata['NextContinuationToken'] if objects_metadata['IsTruncated'] else None)
+
+    return (
+        objects_metadata["Contents"],
+        objects_metadata["NextContinuationToken"] if objects_metadata["IsTruncated"] else None,
+    )

@@ -1,6 +1,5 @@
 # read (cRud)
 from datetime import datetime
-from pathlib import Path
 from typing import (
     List,
     Optional,
@@ -19,18 +18,22 @@ DEFAULT_GET_FILES_MIN_PAGE_SIZE = 10
 DEFAULT_GET_FILES_MAX_PAGE_SIZE = 100
 DEFAULT_GET_FILES_DIRECTORY = ""
 
+
 class FileMetadata(BaseModel):
     file_path: str
     last_modified: datetime
     size_bytes: int
 
+
 # more pydantic models ...
 
+
 class GetFilesQueryParams(BaseModel):
-    page_size: int = Field(DEFAULT_GET_FILES_PAGE_SIZE,
-                           ge=DEFAULT_GET_FILES_MIN_PAGE_SIZE,
-                           le=DEFAULT_GET_FILES_MAX_PAGE_SIZE,
-                    )
+    page_size: int = Field(
+        DEFAULT_GET_FILES_PAGE_SIZE,
+        ge=DEFAULT_GET_FILES_MIN_PAGE_SIZE,
+        le=DEFAULT_GET_FILES_MAX_PAGE_SIZE,
+    )
     directory: str = DEFAULT_GET_FILES_DIRECTORY
     page_token: Optional[str] = None
 
@@ -44,9 +47,12 @@ class GetFilesQueryParams(BaseModel):
                 raise ValueError("page_token is mutually exclusive with page_size and directory")
         return self
 
+
 class GetFilesResponse(BaseModel):
     files: List[FileMetadata]
     next_page_token: Optional[str]
+
+
 class PutFileResponse(BaseModel):
     file_path: str
     message: str

@@ -16,10 +16,7 @@ def test__object_exists_in_s3(mocked_aws: None):
     content_type = "text/plain"
 
     upload_s3_object(
-        bucket_name=TEST_BUCKET_NAME,
-        object_key=object_key,
-        file_content=file_content,
-        content_type=content_type
+        bucket_name=TEST_BUCKET_NAME, object_key=object_key, file_content=file_content, content_type=content_type
     )
 
     # Check that the file exists after uploading it

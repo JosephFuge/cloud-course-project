@@ -20,7 +20,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_exception_handler(exc_class_or_status_code=ValidationError, handler=handle_pydantic_validation_errors)
 
     app.middleware("http")(handle_broad_exceptions)
-    
+
     return app
 
 
