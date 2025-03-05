@@ -25,7 +25,7 @@ version = { file = "version.txt" }
 api = ["uvicorn", "python-multipart", "moto[server]"]
 stubs = ["boto3-stubs[s3]"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
-test = ["pytest", "pytest-cov", "moto[s3]"]
+test = ["pytest", "pytest-cov", "moto[s3]", "httpx"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",
