@@ -22,7 +22,7 @@ jobs:
   check-version-txt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Tag with the release version
@@ -32,7 +32,7 @@ jobs:
   lint-format-and-static-code-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # we need to fetch all branches/history so we can grab openapi.json out of the main branch
           fetch-depth: 0
@@ -42,7 +42,7 @@ jobs:
       - name: Set up Python 3.10.14
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10.14"
+          python-version: "3.12.14"
       # we need our package dependencies in order for the openapi hooks to
       # generate our openapi.json file and detect breaking changes
       - name: Install pre-commit and local hook dependencies
@@ -77,13 +77,13 @@ jobs:
       - build-wheel-and-sdist
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.10.14
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10.14"
       - name: Download wheel and sdist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: wheel-and-sdist
           path: ./dist/
@@ -106,13 +106,13 @@ jobs:
     # if - this is a merge to main or push directly to the main branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.10.14
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10.14"
       - name: Download wheel and sdist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: wheel-and-sdist
           path: ./dist/
