@@ -25,7 +25,7 @@ version = { file = "version.txt" }
 api = ["uvicorn", "python-multipart", "moto[server]"]
 stubs = ["boto3-stubs[s3]"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
-test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "more_itertools"]
+test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "more_itertools", "python-multipart"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",
@@ -36,6 +36,7 @@ static-code-qa = [
     "flake8-docstrings",
     "Flake8-pyproject",
     "radon",
+    "more_itertools"
 ]
 # Installing dev depenendencies in your virtual env makes it so that during development VS Code can
 # - surface linting errors
