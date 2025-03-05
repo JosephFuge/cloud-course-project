@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import (
     List,
     Optional,
-    Self,
 )
 
 from pydantic import (
@@ -13,6 +12,7 @@ from pydantic import (
     Field,
     model_validator,
 )
+from typing_extensions import Self
 
 # Default values are ok as long as they are overrideable by environment variables
 DEFAULT_GET_FILES_PAGE_SIZE = 10

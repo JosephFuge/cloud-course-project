@@ -25,7 +25,7 @@ version = { file = "version.txt" }
 api = ["uvicorn", "python-multipart", "moto[server]"]
 stubs = ["boto3-stubs[s3]"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
-test = ["pytest", "pytest-cov", "moto[s3]", "httpx"]
+test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "more_itertools"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",
@@ -95,6 +95,5 @@ disable = [
     "import-error",
     "too-few-public-methods",
     "redefined-outer-name",
-    "unused-argument",
-    "no-name-in-module"
+    "unused-argument"
 ]
