@@ -95,4 +95,5 @@ disable = [
     "import-error",
     "too-few-public-methods",
     "redefined-outer-name",
+    "unused-argument"
 ]

@@ -5,11 +5,11 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/files/{file_path}": {
+    "/v1/files/{file_path}": {
       "put": {
         "summary": "Upload File",
         "description": "Upload a file.",
-        "operationId": "upload_file_files__file_path__put",
+        "operationId": "upload_file_v1_files__file_path__put",
         "parameters": [
           {
             "name": "file_path",
@@ -26,7 +26,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_upload_file_files__file_path__put"
+                "$ref": "#/components/schemas/Body_upload_file_v1_files__file_path__put"
               }
             }
           }
@@ -57,7 +57,7 @@
       "head": {
         "summary": "Get File Metadata",
         "description": "Retrieve file metadata.\n\nNote: by convention, HEAD requests MUST NOT return a body in the response.",
-        "operationId": "get_file_metadata_files__file_path__head",
+        "operationId": "get_file_metadata_v1_files__file_path__head",
         "parameters": [
           {
             "name": "file_path",
@@ -93,7 +93,7 @@
       "get": {
         "summary": "Get File",
         "description": "Retrieve a file.",
-        "operationId": "get_file_files__file_path__get",
+        "operationId": "get_file_v1_files__file_path__get",
         "parameters": [
           {
             "name": "file_path",
@@ -130,7 +130,7 @@
       "delete": {
         "summary": "Delete File",
         "description": "Delete a file.\n\nNOTE: DELETE requests MUST NOT return a body in the response.",
-        "operationId": "delete_file_files__file_path__delete",
+        "operationId": "delete_file_v1_files__file_path__delete",
         "parameters": [
           {
             "name": "file_path",
@@ -164,11 +164,11 @@
         }
       }
     },
-    "/files": {
+    "/v1/files": {
       "get": {
         "summary": "List Files",
         "description": "List files with pagination.",
-        "operationId": "list_files_files_get",
+        "operationId": "list_files_v1_files_get",
         "parameters": [
           {
             "name": "page_size",
@@ -234,7 +234,7 @@
   },
   "components": {
     "schemas": {
-      "Body_upload_file_files__file_path__put": {
+      "Body_upload_file_v1_files__file_path__put": {
         "properties": {
           "file": {
             "type": "string",
@@ -246,7 +246,7 @@
         "required": [
           "file"
         ],
-        "title": "Body_upload_file_files__file_path__put"
+        "title": "Body_upload_file_v1_files__file_path__put"
       },
       "HTTPValidationError": {
         "properties": {
@@ -277,7 +277,8 @@
           "file_path",
           "message"
         ],
-        "title": "PutFileResponse"
+        "title": "PutFileResponse",
+        "description": "Fetch create file response data."
       },
       "ValidationError": {
         "properties": {

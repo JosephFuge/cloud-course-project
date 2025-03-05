@@ -1,3 +1,5 @@
+"""Define API routes."""
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -33,10 +35,9 @@ ROUTER = APIRouter()
 ##################
 
 
-@ROUTER.put("/files/{file_path:path}")
+@ROUTER.put("/v1/files/{file_path:path}")
 async def upload_file(request: Request, file_path: str, file: UploadFile, response: Response) -> PutFileResponse:
     """Upload a file."""
-
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
 
@@ -58,13 +59,12 @@ async def upload_file(request: Request, file_path: str, file: UploadFile, respon
     return PutFileResponse(file_path=file_path, message=response_message)
 
 
-@ROUTER.get("/files")
+@ROUTER.get("/v1/files")
 async def list_files(
     request: Request,
     query_params: GetFilesQueryParams = Depends(),
 ):
     """List files with pagination."""
-
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
     if query_params.page_token:
@@ -87,13 +87,13 @@ async def list_files(
     )
 
 
-@ROUTER.head("/files/{file_path:path}")
+@ROUTER.head("/v1/files/{file_path:path}")
 async def get_file_metadata(request: Request, file_path: str, response: Response) -> Response:
-    """Retrieve file metadata.
+    """
+    Retrieve file metadata.
 
     Note: by convention, HEAD requests MUST NOT return a body in the response.
     """
-
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
 
@@ -110,13 +110,12 @@ async def get_file_metadata(request: Request, file_path: str, response: Response
     return response
 
 
-@ROUTER.get("/files/{file_path:path}")
+@ROUTER.get("/v1/files/{file_path:path}")
 async def get_file(
     request: Request,
     file_path: str = Path(pattern=r"^([\w\d\s\-.]+/)*([\w\d\s\-.])+\.\w+$"),
 ):
     """Retrieve a file."""
-
     # 1 - Business logic: errors that the user can fix
     # error case: object does not exist in the bucket
     # error case: invalid inputs
@@ -136,15 +135,17 @@ async def get_file(
     return StreamingResponse(content=obj_response["Body"], media_type=obj_response["ContentType"])
 
 
-@ROUTER.delete("/files/{file_path:path}")
+@ROUTER.delete("/v1/files/{file_path:path}")
 async def delete_file(
     request: Request,
     file_path: str,
     response: Response,
 ) -> Response:
-    """Delete a file.
+    """
+    Delete a file.
 
-    NOTE: DELETE requests MUST NOT return a body in the response."""
+    NOTE: DELETE requests MUST NOT return a body in the response.
+    """
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
 

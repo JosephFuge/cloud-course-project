@@ -32,14 +32,13 @@ def object_exists_in_s3(bucket_name: str, object_key: str, s3_client: Optional["
 
     :return: True if the object exists, False otherwise.
     """
-
     try:
         s3_client = s3_client or boto3.client("s3")
         obj = s3_client.get_object(Bucket=bucket_name, Key=object_key)
         obj.get("Body")
     except botocore.exceptions.ClientError as e:
         error_code = e.response["Error"]["Code"]
-        if error_code == "404" or error_code == "NoSuchKey":
+        if error_code in ("404", "NoSuchKey"):
             return False
 
     return True
@@ -112,7 +111,6 @@ def fetch_s3_objects_metadata(
         1. Possibly empty list of objects in the current page.
         2. Next continuation token if there are more pages, otherwise None.
     """
-
     s3_client = s3_client or boto3.client("s3")
     max_keys = max_keys or DEFAULT_MAX_KEYS
     params: Dict[str, Any] = {}

@@ -1,4 +1,4 @@
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,missing-module-docstring
 
 import argparse
 import json
@@ -27,6 +27,7 @@ class Diff:
     after: Union[str, dict, list, None]
 
     def __str__(self) -> str:
+        """Create Diff output string."""
         before_str = "MISSING" if self.before is None else json.dumps(self.before, indent=2)
         after_str = "MISSING" if self.after is None else json.dumps(self.after, indent=2)
         return f"******** Diff at: {self.path}\nBEFORE: {before_str}\nAFTER: {after_str}"
@@ -42,6 +43,7 @@ class Args(NamedTuple):
 
 
 def main() -> None:
+    """Run generate openapi script."""
     args = parse_args()
 
     if args.command == "generate":

@@ -18,7 +18,6 @@ def delete_s3_object(bucket_name: str, object_key: str, s3_client: Optional["S3C
     :param object_key: Key of the object to delete.
     :param s3_client: Optional S3 client to use. If not provided, a new client will be created.
     """
-
     s3_client = s3_client or boto3.client("s3")
     resp = s3_client.delete_object(Bucket=bucket_name, Key=object_key)
     print(resp)
