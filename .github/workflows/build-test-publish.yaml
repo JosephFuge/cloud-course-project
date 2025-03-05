@@ -42,7 +42,7 @@ jobs:
       - name: Set up Python 3.10.14
         uses: actions/setup-python@v3
         with:
-          python-version: "3.12.14"
+          python-version: "3.10.14"
       # we need our package dependencies in order for the openapi hooks to
       # generate our openapi.json file and detect breaking changes
       - name: Install pre-commit and local hook dependencies
