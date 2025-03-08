@@ -35,8 +35,7 @@ static-code-qa = [
     "flake8",
     "flake8-docstrings",
     "Flake8-pyproject",
-    "radon",
-    "python-multipart"
+    "radon"
 ]
 # Installing dev depenendencies in your virtual env makes it so that during development VS Code can
 # - surface linting errors
