@@ -39,10 +39,10 @@ jobs:
       # we need docker to run the oasdiff CLI pre-commit hook
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.3.0
-      - name: Set up Python 3.10.14
+      - name: Set up Python 3.11.7
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10.14"
+          python-version: "3.11.7"
       # we need our package dependencies in order for the openapi hooks to
       # generate our openapi.json file and detect breaking changes
       - name: Install pre-commit and local hook dependencies
@@ -56,10 +56,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.10.14
+      - name: Set up Python 3.11.7
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.14"
+          python-version: "3.11.7"
       - name: Install build CLI
         run: |
           pip install build
@@ -78,10 +78,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.10.14
+      - name: Set up Python 3.11.7
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.14"
+          python-version: "3.11.7"
       - name: Download wheel and sdist
         uses: actions/download-artifact@v4
         with:
