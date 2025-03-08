@@ -54,7 +54,8 @@ def test_get_files_page_token_is_mutually_exclusive_with_page_size_and_directory
     assert "mutually exclusive" in str(response.json())
 
 
-def test_unforeseen_500_error(client: TestClient):
+    
+def test_unforeseen_500_error(client: TestClient, mocked_aws: None):
     """Test general internal server error for unanticipated errors."""
     # delete the S3 bucket and all the objects inside
     delete_s3_bucket(TEST_BUCKET_NAME)
