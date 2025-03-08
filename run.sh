@@ -20,8 +20,12 @@ function install {
     python -m pip install --editable "$THIS_DIR/[dev]"
 }
 
+function install-generated-sdk {
+    python -m pip install --editable "$THIS_DIR/files-api-sdk" \
+        --config-settings editable_mode=strict
+}
+
 function generate-client-library {
-    rm -rf files-api-sdk || true
     docker run --rm \
         -v ${PWD}:/local openapitools/openapi-generator-cli generate \
         --generator-name python-pydantic-v1 \

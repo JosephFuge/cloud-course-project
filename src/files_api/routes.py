@@ -28,14 +28,17 @@ from files_api.schemas import (
 )
 from files_api.settings import Settings
 
-ROUTER = APIRouter()
+ROUTER = APIRouter(tags=["Files"])
 
 ##################
 # --- Routes --- #
 ##################
 
 
-@ROUTER.put("/v1/files/{file_path:path}")
+@ROUTER.put(
+    "/v1/files/{file_path:path}",
+    responses={status.HTTP_200_OK: {"model": PutFileResponse}, status.HTTP_201_CREATED: {"model": PutFileResponse}},
+)
 async def upload_file(request: Request, file_path: str, file: UploadFile, response: Response) -> PutFileResponse:
     """Upload a file."""
     settings = request.app.state.settings

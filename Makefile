@@ -19,6 +19,9 @@ help:
 install:
 	bash run.sh install
 
+install-generated-sdk:
+	bash run.sh install-generated-sdk
+
 run:
 	bash run.sh run
 
