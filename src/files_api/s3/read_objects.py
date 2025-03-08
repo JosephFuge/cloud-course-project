@@ -8,7 +8,8 @@ from typing import (
 
 import boto3
 import botocore
-from more_itertools import flatten
+
+from files_api.utils import list_flatten
 
 try:
     from mypy_boto3_s3 import S3Client
@@ -89,7 +90,7 @@ def fetch_s3_objects_using_page_token(
         Bucket=bucket_name, PaginationConfig={"MaxItems": max_keys, "StartingToken": continuation_token}
     )
 
-    object_data = list(flatten([page["Contents"] for page in page_iterator]))
+    object_data = list(list_flatten([page["Contents"] for page in page_iterator]))
 
     return (object_data, str(page_iterator.resume_token))
 
