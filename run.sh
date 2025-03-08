@@ -20,6 +20,16 @@ function install {
     python -m pip install --editable "$THIS_DIR/[dev]"
 }
 
+function generate-client-library {
+    rm -rf files-api-sdk || true
+    docker run --rm \
+        -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+        --generator-name python-pydantic-v1 \
+        --input-spec /local/openapi.json \
+        --output /local/files-api-sdk \
+        --package-name files_api_sdk
+}
+
 function run {
     AWS_PROFILE=cloud-course S3_BUCKET_NAME="some-bucket" uvicorn files_api.main:create_app --reload
 }

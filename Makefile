@@ -7,6 +7,9 @@
 build:
 	bash run.sh build
 
+generate-client-library:
+	sudo bash run.sh generate-client-library
+
 clean:
 	bash run.sh clean
 
