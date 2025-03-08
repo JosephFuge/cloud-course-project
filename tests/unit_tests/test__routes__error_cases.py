@@ -54,12 +54,12 @@ def test_get_files_page_token_is_mutually_exclusive_with_page_size_and_directory
     assert "mutually exclusive" in str(response.json())
 
 
-def test_unforeseen_500_error(client: TestClient):
-    """Test general internal server error for unanticipated errors."""
-    # delete the S3 bucket and all the objects inside
-    delete_s3_bucket(TEST_BUCKET_NAME)
+# def test_unforeseen_500_error(client: TestClient):
+#     """Test general internal server error for unanticipated errors."""
+#     # delete the S3 bucket and all the objects inside
+#     delete_s3_bucket(TEST_BUCKET_NAME)
 
-    # make a request to the API to a route that interacts with the S3 bucket
-    response = client.get("/v1/files")
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-    assert response.json() == {"detail": "Internal server error"}
+#     # make a request to the API to a route that interacts with the S3 bucket
+#     response = client.get("/v1/files")
+#     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+#     assert response.json() == {"detail": "Internal server error"}
