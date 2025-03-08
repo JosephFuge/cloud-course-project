@@ -1,3 +1,5 @@
+"""Define settings for FastAPI app."""
+
 from pydantic import Field  # BaseModel,
 from pydantic_settings import (
     BaseSettings,
@@ -6,7 +8,8 @@ from pydantic_settings import (
 
 
 class Settings(BaseSettings):
-    """Settings for the files API.
+    """
+    Settings for the files API.
 
     Pydantic BaseSettings docs: https://docs.pydantic.dev/latest/concepts/pydantic_settings/
     FastAPI guide to managing settings: https://fastapi.tiangolo.com/advanced/settings/

@@ -1,3 +1,5 @@
+"""Test API Routes happy paths."""
+
 from fastapi import status
 from fastapi.testclient import TestClient
 
@@ -10,9 +12,10 @@ TEST_FILE_CONTENT_TYPE = "text/plain"
 
 
 def test_upload_file(client: TestClient):
+    """Test the file upload route."""
     # create a file
     response = client.put(
-        f"/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
+        f"/v1/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
     )
 
     assert response.status_code == status.HTTP_201_CREATED
@@ -21,7 +24,7 @@ def test_upload_file(client: TestClient):
     # update an existing file
     updated_content = b"updated content"
     response = client.put(
-        f"/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, updated_content, TEST_FILE_CONTENT_TYPE)}
+        f"/v1/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, updated_content, TEST_FILE_CONTENT_TYPE)}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -32,10 +35,13 @@ def test_upload_file(client: TestClient):
 
 
 def test_list_files_with_pagination(client: TestClient):
+    """Test the list files with paging route."""
     for i in range(13):
-        client.put(f"/files/file{i}.txt", files={"file": (f"file{i}.txt", TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)})
+        client.put(
+            f"/v1/files/file{i}.txt", files={"file": (f"file{i}.txt", TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
+        )
 
-    response = client.get("/files?page_size=10")
+    response = client.get("/v1/files?page_size=10")
     assert response
 
     assert response.status_code == 200
@@ -45,9 +51,12 @@ def test_list_files_with_pagination(client: TestClient):
 
 
 def test_get_file_metadata(client: TestClient):
-    client.put(f"/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)})
+    """Test the fetch file metadata route."""
+    client.put(
+        f"/v1/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
+    )
 
-    response = client.head(f"/files/{TEST_FILE_PATH}")
+    response = client.head(f"/v1/files/{TEST_FILE_PATH}")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.headers["Content-Type"] == TEST_FILE_CONTENT_TYPE
@@ -59,18 +68,24 @@ def test_get_file_metadata(client: TestClient):
 
 
 def test_get_file(client: TestClient):
-    client.put(f"/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)})
+    """Test the fetch file route."""
+    client.put(
+        f"/v1/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
+    )
 
-    response = client.get(f"/files/{TEST_FILE_PATH}")
+    response = client.get(f"/v1/files/{TEST_FILE_PATH}")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.content == TEST_FILE_CONTENT
 
 
 def test_delete_file(client: TestClient):
-    client.put(f"/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)})
+    """Test the delete file route."""
+    client.put(
+        f"/v1/files/{TEST_FILE_PATH}", files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)}
+    )
 
-    response = client.delete(f"/files/{TEST_FILE_PATH}")
+    response = client.delete(f"/v1/files/{TEST_FILE_PATH}")
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 

@@ -1,3 +1,5 @@
+"""Test read file operations."""
+
 from moto import mock_aws
 
 from files_api.s3.read_objects import (
@@ -14,6 +16,7 @@ from tests.consts import TEST_BUCKET_NAME
 
 @mock_aws
 def test__object_exists_in_s3(mocked_aws: None):
+    """Test checking that an object exists in s3."""
     # Upload a file to the bucket
     object_key = "test.txt"
     file_content: bytes = b"Hello, world!"
@@ -35,6 +38,7 @@ def test__object_exists_in_s3(mocked_aws: None):
 
 @mock_aws
 def test__fetch_s3_objects_metadata(mocked_aws: None):
+    """Test fetching an object's metadata."""
     num_files = 5
     # Upload files to the bucket
     for i in range(num_files):
@@ -60,6 +64,7 @@ def test__fetch_s3_objects_metadata(mocked_aws: None):
 
 @mock_aws
 def test__fetch_s3_object(mocked_aws: None):
+    """Test fetching an object."""
     object_key = "test.txt"
     file_content: bytes = b"Hello, world! - Testing fetch_s3_object"
     content_type = "text/plain"
@@ -76,6 +81,7 @@ def test__fetch_s3_object(mocked_aws: None):
 
 @mock_aws
 def test__fetch_s3_objects_using_page_token(mocked_aws: None):
+    """Test fetching a page of objects."""
     num_files = 10
     # Upload files to the bucket
     for i in range(num_files):

@@ -1,3 +1,5 @@
+"""Set up mocked aws fixture for tests."""
+
 import os
 
 import boto3
@@ -12,6 +14,7 @@ from tests.unit_tests.utils import delete_s3_bucket
 
 
 def point_away_from_aws():
+    """Set AWS environment variables to invalid values."""
     os.environ["AWS_ACCESS_KEY_ID"] = "testing"
     os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
     os.environ["AWS_SECURITY_TOKEN"] = "testing"
@@ -21,6 +24,7 @@ def point_away_from_aws():
 
 @fixture
 def mocked_aws():
+    """Set up mocked aws for tests."""
     with mock_aws():
         point_away_from_aws()
 

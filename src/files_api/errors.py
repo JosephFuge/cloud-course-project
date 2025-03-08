@@ -1,3 +1,6 @@
+"""Handle api errors."""
+
+# pylint: disable=unused-argument,broad-exception-caught
 from fastapi import (
     Request,
     status,
@@ -18,6 +21,7 @@ async def handle_broad_exceptions(request: Request, call_next):
 
 
 async def handle_pydantic_validation_errors(request: Request, exc: ValidationError):
+    """Catch pydantic validation errors and return details to the client."""
     errors = exc.errors()
 
     return JSONResponse(

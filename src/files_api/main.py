@@ -1,3 +1,5 @@
+"""Initialize FastAPI REST API app."""
+
 from fastapi import FastAPI
 from pydantic import ValidationError
 
@@ -10,7 +12,7 @@ from files_api.settings import Settings
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    """Create a FastAPI ROUTERlication"""
+    """Create a FastAPI ROUTERlication."""
     settings = settings or Settings()
 
     app = FastAPI()
