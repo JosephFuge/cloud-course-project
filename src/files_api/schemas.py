@@ -9,6 +9,7 @@ from typing import (
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
     model_validator,
 )
@@ -61,9 +62,54 @@ class GetFilesResponse(BaseModel):
     files: List[FileMetadata]
     next_page_token: Optional[str]
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "files": [
+                    {
+                        "file_path": "path/to/pyproject.toml",
+                        "last_modified": "2022-01-01T00:00:00Z",
+                        "size_bytes": 512,
+                    },
+                    {
+                        "file_path": "path/to/Makefile",
+                        "last_modified": "2022-01-01T00:00:00Z",
+                        "size_bytes": 256,
+                    }
+                ],
+                "next_page_token": "next_page_token_example"
+            }
+        }
+    )
+
 
 class PutFileResponse(BaseModel):
     """Fetch create file response data."""
 
     file_path: str
     message: str
+    
+  #
+
+PUT_FILE_EXAMPLES = {
+    "200": {
+        "content": {
+            "application/json": {
+                "example": {
+                    "file_path": "path/to/existing_file.txt",
+                    "message": "File successfully updated."
+                }
+            }
+        }
+    },
+    "201": {
+        "content": {
+            "application/json": {
+                "example": {
+                    "file_path": "path/to/new_file.txt",
+                    "message": "New file uploaded successfully."
+                }
+            }
+        }
+    },
+}

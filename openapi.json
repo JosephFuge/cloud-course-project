@@ -12,7 +12,7 @@
         ],
         "summary": "Upload File",
         "description": "Upload a file.",
-        "operationId": "upload_file_v1_files__file_path__put",
+        "operationId": "Files-upload_file",
         "parameters": [
           {
             "name": "file_path",
@@ -29,7 +29,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_upload_file_v1_files__file_path__put"
+                "$ref": "#/components/schemas/Body_Files-upload_file"
               }
             }
           }
@@ -73,7 +73,7 @@
         ],
         "summary": "Get File Metadata",
         "description": "Retrieve file metadata.\n\nNote: by convention, HEAD requests MUST NOT return a body in the response.",
-        "operationId": "get_file_metadata_v1_files__file_path__head",
+        "operationId": "Files-get_file_metadata",
         "parameters": [
           {
             "name": "file_path",
@@ -112,7 +112,7 @@
         ],
         "summary": "Get File",
         "description": "Retrieve a file.",
-        "operationId": "get_file_v1_files__file_path__get",
+        "operationId": "Files-get_file",
         "parameters": [
           {
             "name": "file_path",
@@ -152,7 +152,7 @@
         ],
         "summary": "Delete File",
         "description": "Delete a file.\n\nNOTE: DELETE requests MUST NOT return a body in the response.",
-        "operationId": "delete_file_v1_files__file_path__delete",
+        "operationId": "Files-delete_file",
         "parameters": [
           {
             "name": "file_path",
@@ -193,7 +193,7 @@
         ],
         "summary": "List Files",
         "description": "List files with pagination.",
-        "operationId": "list_files_v1_files_get",
+        "operationId": "Files-list_files",
         "parameters": [
           {
             "name": "page_size",
@@ -259,7 +259,7 @@
   },
   "components": {
     "schemas": {
-      "Body_upload_file_v1_files__file_path__put": {
+      "Body_Files-upload_file": {
         "properties": {
           "file": {
             "type": "string",
@@ -271,7 +271,7 @@
         "required": [
           "file"
         ],
-        "title": "Body_upload_file_v1_files__file_path__put"
+        "title": "Body_Files-upload_file"
       },
       "HTTPValidationError": {
         "properties": {

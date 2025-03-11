@@ -21,7 +21,7 @@ with files_api_sdk.ApiClient(configuration) as api_client:
 
     try:
         # Delete File
-        api_response = api_instance.upload_file_v1_files_file_path_put(file_path, file)
+        api_response = api_instance.files_upload_file(file_path, file)
         print("The response of DefaultApi->upload_file_v1_files_file_path_put:\n")
         pprint(api_response)
     except ApiException as e:

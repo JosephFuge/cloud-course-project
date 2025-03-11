@@ -21,6 +21,7 @@ from files_api.s3.read_objects import (
 )
 from files_api.s3.write_objects import upload_s3_object
 from files_api.schemas import (
+    PUT_FILE_EXAMPLES,
     FileMetadata,
     GetFilesQueryParams,
     GetFilesResponse,
@@ -37,7 +38,8 @@ ROUTER = APIRouter(tags=["Files"])
 
 @ROUTER.put(
     "/v1/files/{file_path:path}",
-    responses={status.HTTP_200_OK: {"model": PutFileResponse}, status.HTTP_201_CREATED: {"model": PutFileResponse}},
+    responses={status.HTTP_200_OK: {"model": PutFileResponse, **PUT_FILE_EXAMPLES['200']},
+        status.HTTP_201_CREATED: {"model": PutFileResponse, **PUT_FILE_EXAMPLES['201']},},
 )
 async def upload_file(request: Request, file_path: str, file: UploadFile, response: Response) -> PutFileResponse:
     """Upload a file."""
@@ -66,7 +68,7 @@ async def upload_file(request: Request, file_path: str, file: UploadFile, respon
 async def list_files(
     request: Request,
     query_params: GetFilesQueryParams = Depends(),
-):
+) -> GetFilesResponse:
     """List files with pagination."""
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
