@@ -25,9 +25,9 @@ DEFAULT_GET_FILES_DIRECTORY = ""
 class FileMetadata(BaseModel):
     """File metadata response details."""
 
-    file_path: str
-    last_modified: datetime
-    size_bytes: int
+    file_path: str = Field(description="Path to the file.")
+    last_modified: datetime = Field(description="Date and time of last modification of file.")
+    size_bytes: int = Field(description="Length of file in bytes.")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -47,9 +47,16 @@ class GetFilesQueryParams(BaseModel):
         DEFAULT_GET_FILES_PAGE_SIZE,
         ge=DEFAULT_GET_FILES_MIN_PAGE_SIZE,
         le=DEFAULT_GET_FILES_MAX_PAGE_SIZE,
+        description="Number of files to return in each page. Mutually exclusive with `page_token`."
     )
-    directory: str = DEFAULT_GET_FILES_DIRECTORY
-    page_token: Optional[str] = None
+    directory: str = Field(
+        default=DEFAULT_GET_FILES_DIRECTORY,
+        description="Directory in which to list files. Mutually exclusive with `page_token`."
+        )
+    page_token: Optional[str] = Field(
+        default=None,
+        description="Token to continue pagination. Mutually exclusive with `directory` and `page_size`."
+    )
 
     @model_validator(mode="after")
     def check_page_token_exclusivity(self) -> Self:
@@ -66,8 +73,10 @@ class GetFilesQueryParams(BaseModel):
 class GetFilesResponse(BaseModel):
     """Fetch page of files response data."""
 
-    files: List[FileMetadata]
-    next_page_token: Optional[str]
+    files: List[FileMetadata] = Field(description="List of file metadata.")
+    next_page_token: Optional[str] = Field(
+            description="Next page token. Missing if the response contained the last page."
+        )
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -93,8 +102,8 @@ class GetFilesResponse(BaseModel):
 class PutFileResponse(BaseModel):
     """Fetch create file response data."""
 
-    file_path: str
-    message: str
+    file_path: str = Field(description="Path to the created or updated file.")
+    message: str = Field(description="Additional details on the creation or update of the file.")
 
 PUT_FILE_EXAMPLES = {
     "200": {
