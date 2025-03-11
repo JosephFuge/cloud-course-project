@@ -29,8 +29,15 @@ class FileMetadata(BaseModel):
     last_modified: datetime
     size_bytes: int
 
-
-# more pydantic models ...
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "file_path": "path/to/pyproject.toml",
+                "last_modified": "2022-01-01T00:00:00Z",
+                "size_bytes": 512,
+            }
+        }
+    )
 
 
 class GetFilesQueryParams(BaseModel):
@@ -88,8 +95,6 @@ class PutFileResponse(BaseModel):
 
     file_path: str
     message: str
-    
-  #
 
 PUT_FILE_EXAMPLES = {
     "200": {
