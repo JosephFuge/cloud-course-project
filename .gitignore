@@ -174,3 +174,6 @@ dist
 *env
 *.env
 *cache*
+
+# Rather than commiting the client sdk, please source .venv and run "make generate-client-sdk" locally.
+files-api-sdk

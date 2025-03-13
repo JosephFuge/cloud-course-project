@@ -47,15 +47,14 @@ class GetFilesQueryParams(BaseModel):
         DEFAULT_GET_FILES_PAGE_SIZE,
         ge=DEFAULT_GET_FILES_MIN_PAGE_SIZE,
         le=DEFAULT_GET_FILES_MAX_PAGE_SIZE,
-        description="Number of files to return in each page. Mutually exclusive with `page_token`."
+        description="Number of files to return in each page. Mutually exclusive with `page_token`.",
     )
     directory: str = Field(
         default=DEFAULT_GET_FILES_DIRECTORY,
-        description="Directory in which to list files. Mutually exclusive with `page_token`."
-        )
+        description="Directory in which to list files. Mutually exclusive with `page_token`.",
+    )
     page_token: Optional[str] = Field(
-        default=None,
-        description="Token to continue pagination. Mutually exclusive with `directory` and `page_size`."
+        default=None, description="Token to continue pagination. Mutually exclusive with `directory` and `page_size`."
     )
 
     @model_validator(mode="after")
@@ -75,8 +74,8 @@ class GetFilesResponse(BaseModel):
 
     files: List[FileMetadata] = Field(description="List of file metadata.")
     next_page_token: Optional[str] = Field(
-            description="Next page token. Missing if the response contained the last page."
-        )
+        description="Next page token. Missing if the response contained the last page."
+    )
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -91,9 +90,9 @@ class GetFilesResponse(BaseModel):
                         "file_path": "path/to/Makefile",
                         "last_modified": "2022-01-01T00:00:00Z",
                         "size_bytes": 256,
-                    }
+                    },
                 ],
-                "next_page_token": "next_page_token_example"
+                "next_page_token": "next_page_token_example",
             }
         }
     )
@@ -105,24 +104,19 @@ class PutFileResponse(BaseModel):
     file_path: str = Field(description="Path to the created or updated file.")
     message: str = Field(description="Additional details on the creation or update of the file.")
 
+
 PUT_FILE_EXAMPLES = {
     "200": {
         "content": {
             "application/json": {
-                "example": {
-                    "file_path": "path/to/existing_file.txt",
-                    "message": "File successfully updated."
-                }
+                "example": {"file_path": "path/to/existing_file.txt", "message": "File successfully updated."}
             }
         }
     },
     "201": {
         "content": {
             "application/json": {
-                "example": {
-                    "file_path": "path/to/new_file.txt",
-                    "message": "New file uploaded successfully."
-                }
+                "example": {"file_path": "path/to/new_file.txt", "message": "New file uploaded successfully."}
             }
         }
     },

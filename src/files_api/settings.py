@@ -16,5 +16,7 @@ class Settings(BaseSettings):
     """
 
     s3_bucket_name: str = Field(...)
+    openai_api_key: str = Field(...)
+    openai_base_url: str = Field(...)
 
-    model_config = SettingsConfigDict(case_sensitive=False)
+    model_config = SettingsConfigDict(case_sensitive=False, env_file=".env")

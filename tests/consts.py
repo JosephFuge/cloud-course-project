@@ -6,3 +6,4 @@ THIS_DIR = Path(__file__).parent
 PROJECT_DIR = (THIS_DIR / "../").resolve()
 
 TEST_BUCKET_NAME = "test-bucket-cloud-engineering-jfuge"
+MOCKED_OPENAI_PORT = 5006

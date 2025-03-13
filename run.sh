@@ -48,6 +48,7 @@ function run-mock {
     export AWS_SECRET_ACCESS_KEY="mock"
     export AWS_ACCESS_KEY_ID="mock"
     export S3_BUCKET_NAME="some-bucket"
+    source ./.env
 
     aws s3 mb "s3://$S3_BUCKET_NAME"
 
@@ -88,6 +89,8 @@ function run-tests {
 
     # clean the test-reports dir
     rm -rf "$THIS_DIR/test-reports" || mkdir "$THIS_DIR/test-reports"
+
+    source ./.env
 
     # execute the tests, calculate coverage, and generate coverage reports in the test-reports dir
     python -m pytest ${@:-"$THIS_DIR/tests/"} \

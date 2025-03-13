@@ -17,11 +17,13 @@ from files_api.settings import Settings
 def custom_generate_unique_id(route: APIRoute):
     return f"{route.tags[0]}-{route.name}"
 
+
 def create_app(settings: Settings | None = None) -> FastAPI:
     """Create a FastAPI ROUTERlication."""
     settings = settings or Settings()
 
-    app = FastAPI(        title="Files API",
+    app = FastAPI(
+        title="Files API",
         summary="Store and retrieve files.",
         version="v1",  # a fancier version would read the semver from pkg metadata
         description=dedent(
@@ -34,7 +36,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         """
         ),
         docs_url="/",  # its easier to find the docs when they live on the base url
-generate_unique_id_function=custom_generate_unique_id)
+        generate_unique_id_function=custom_generate_unique_id,
+    )
     app.state.settings = settings
     app.include_router(ROUTER)
 

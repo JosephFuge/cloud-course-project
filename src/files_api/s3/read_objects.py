@@ -17,7 +17,8 @@ try:
         GetObjectOutputTypeDef,
         ObjectTypeDef,
     )
-except ImportError:
+except ImportError as e:
+    print(f"ImportError in read_objects.py: {e}")
     ...
 
 DEFAULT_MAX_KEYS = 1_000
