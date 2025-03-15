@@ -52,11 +52,33 @@ function run-mock {
 
     aws s3 mb "s3://$S3_BUCKET_NAME"
 
-    trap 'kill $MOTO_PID' EXIT
+     #######################################
+    # --- Mock OpenAI with mockserver --- #
+    #######################################
 
+    export OPENAI_MOCK_PORT=5002
+    python tests/mocks/openai_fastapi_mock_app.py &
+    OPENAI_MOCK_PID=$!
+
+    # point the OpenAI SDK to the mocked OpenAI server using mocked credentials
+	export OPENAI_BASE_URL="http://localhost:${OPENAI_MOCK_PORT}"
+	export OPENAI_API_KEY="mocked_key"
+
+    ###########################################################
+    # --- Schedule the mocks to shut down on FastAPI Exit --- #
+    ###########################################################
+
+    # schedule: when uvicorn stops, kill the moto.server and mocked open-ai server process
+    trap 'kill $MOTO_PID; kill $OPENAI_MOCK_PID' EXIT
+
+    # ----- #
+
+    # Set AWS endpoint URL and start FastAPI app with uvicorn in the foreground
     uvicorn files_api.main:create_app --reload
 
+    # Wait for the moto.server process to finish (this is optional if you want to keep it running)
     wait $MOTO_PID
+    wait $OPENAI_MOCK_PID
 }
 
 # run linting, formatting, and other static code quality tools

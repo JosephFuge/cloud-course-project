@@ -1,5 +1,6 @@
 """Initialize FastAPI REST API app."""
 
+import os
 from textwrap import dedent
 
 from fastapi import FastAPI
@@ -10,7 +11,10 @@ from files_api.errors import (
     handle_broad_exceptions,
     handle_pydantic_validation_errors,
 )
-from files_api.routes import ROUTER
+from files_api.routes import (
+    GENERATE_ROUTER,
+    ROUTER,
+)
 from files_api.settings import Settings
 
 
@@ -40,6 +44,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = settings
     app.include_router(ROUTER)
+    app.include_router(GENERATE_ROUTER)
 
     app.add_exception_handler(exc_class_or_status_code=ValidationError, handler=handle_pydantic_validation_errors)
 

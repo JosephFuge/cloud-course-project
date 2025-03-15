@@ -15,7 +15,7 @@ from tests.consts import (
 @pytest.fixture
 def client(mocked_aws) -> TestClient:  # type: ignore # pylint: disable=unused-argument
     """Create standard api test client for tests."""
-    settings = Settings(s3_bucket_name=TEST_BUCKET_NAME, openai_base_url=f"127.0.0.1:{MOCKED_OPENAI_PORT}")
+    settings = Settings(s3_bucket_name=TEST_BUCKET_NAME)
     app = create_app(settings=settings)
     with TestClient(app) as client:
         yield client

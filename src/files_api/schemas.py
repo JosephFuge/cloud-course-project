@@ -7,6 +7,7 @@ from typing import (
     Optional,
 )
 
+from fastapi import Path
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -121,3 +122,23 @@ PUT_FILE_EXAMPLES = {
         }
     },
 }
+
+class GenerateFilesQueryParams(BaseModel):
+    """Query parameters for `POST /v1/files/generate`."""
+
+    file_path: str = Path(
+        ...,
+        description="The path to the file to generate.",
+        json_schema_extra={"example": "path/to/file.txt"},
+        # pattern="^.*\.(txt|png|jpg|jpeg|mp3|opus|aac|flac|wav|pcm)$",
+    )
+    prompt: str = Field(
+        ...,
+        description="The prompt to generate the file content.",
+        json_schema_extra={"example": "Generate a text file."},
+    )
+    file_type: str = Field(
+        ...,
+        description="The type of file to generate.",
+        json_schema_extra={"example": "Text"},
+    )

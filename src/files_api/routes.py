@@ -1,5 +1,7 @@
 """Define API routes."""
 
+from typing import Annotated
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -12,6 +14,9 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 
+from files_api.genai.create_audio import create_audio_file
+from files_api.genai.create_image import create_image_file
+from files_api.genai.create_text import create_text_file
 from files_api.s3.delete_objects import delete_s3_object
 from files_api.s3.read_objects import (
     fetch_s3_object,
@@ -23,6 +28,7 @@ from files_api.s3.write_objects import upload_s3_object
 from files_api.schemas import (
     PUT_FILE_EXAMPLES,
     FileMetadata,
+    GenerateFilesQueryParams,
     GetFilesQueryParams,
     GetFilesResponse,
     PutFileResponse,
@@ -31,6 +37,7 @@ from files_api.settings import Settings
 from files_api.utils import object_exists_response
 
 ROUTER = APIRouter(tags=["Files"])
+GENERATE_ROUTER = APIRouter(tags=["Generate Files"])
 
 ##################
 # --- Routes --- #
@@ -207,3 +214,39 @@ async def delete_file(
 
     response.status_code = status.HTTP_204_NO_CONTENT
     return response
+
+@GENERATE_ROUTER.post(
+    "/v1/files/generate/{file_type:str}/{file_path:path}",
+    responses={status.HTTP_201_CREATED: {"model": PutFileResponse, **PUT_FILE_EXAMPLES['201']},},
+)
+async def create_file(request: Request, prompt: str, response: Response, query_params: Annotated[GenerateFilesQueryParams, Depends()]) -> PutFileResponse:
+    """Create a file."""
+    print("You are here!")
+    settings = request.app.state.settings
+    s3_bucket_name = settings.s3_bucket_name
+
+    response_message, response.status_code = object_exists_response(s3_bucket_name, query_params.file_path)
+
+    if query_params.file_type == "text":
+        print("creating a text file...")
+        file_contents: bytes = await create_text_file(prompt)
+        content_type = "text/plain"
+    elif query_params.file_type == "image":
+        file_contents = await create_image_file(prompt)
+        content_type = "image/png"
+    elif query_params.file_type == "audio":
+        file_contents = await create_audio_file(prompt)
+        content_type = "audio/mpeg"
+    else:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"File type not valid: {query_params.file_type}")
+
+    if file_contents:
+        response.status_code = status.HTTP_201_CREATED
+
+        upload_s3_object(
+            bucket_name=s3_bucket_name, object_key=query_params.file_path, file_content=file_contents, content_type=content_type
+        )
+
+        return PutFileResponse(file_path=query_params.file_path, message=response_message)
+    else:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)

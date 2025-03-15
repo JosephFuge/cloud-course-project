@@ -93,3 +93,14 @@ def test_delete_file(client: TestClient):
     obj_exists = object_exists_in_s3(TEST_BUCKET_NAME, TEST_FILE_PATH)
     print(f"Object exists after deletion: {obj_exists}")
     assert not obj_exists
+
+def test_generate_text_file(client: TestClient):
+    """Test the generate file route for generating text."""
+    response = client.post(f"/v1/files/generate/text/{TEST_FILE_PATH}", params={"prompt": "A short poem about python"})
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # My solution to check if the file exists:
+    obj_exists = object_exists_in_s3(TEST_BUCKET_NAME, TEST_FILE_PATH)
+    print(f"Object exists after generation: {obj_exists}")
+    assert obj_exists
