@@ -1,0 +1,25 @@
+{
+    "version": "2.0",
+    "routeKey": "PUT /v1/files/{file_path}",
+    "rawPath": "/v1/files/generated/speech.mp3",
+    "rawQueryString": "",
+    "headers": {},
+    "requestContext": {
+        "accountId": "123456789012",
+        "apiId": "api-id",
+        "http": {
+            "method": "GET",
+            "path": "/v1/files/generated/speech.mp3",
+            "protocol": "HTTP/1.1",
+            "sourceIp": "192.168.1.1",
+            "userAgent": "CustomUserAgentString"
+        },
+        "requestId": "example-id",
+        "routeKey": "GET /v1/files/{file_path}",
+        "stage": "prod"
+    },
+    "pathParameters": {
+        "file_path": "generated/speech.mp3"
+    },
+    "isBase64Encoded": true
+}

@@ -1,0 +1,4 @@
+# this file is generated -- do not edit
+mangum
+nest_asyncio
+rich
