@@ -7,6 +7,9 @@
 build:
 	bash run.sh build
 
+deploy-lambda: clean
+	bash run.sh deploy-lambda
+
 generate-client-library:
 	sudo bash run.sh generate-client-library
 

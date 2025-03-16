@@ -22,6 +22,7 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
+aws-lambda = ["mangum"]
 api = ["uvicorn", "python-multipart", "moto[server]", ]
 stubs = ["boto3-stubs[s3]"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
@@ -42,7 +43,7 @@ static-code-qa = [
 # - automatically apply formatting
 # - show enhanced autocompletion for stubs libraries
 # See .vscode/settings.json to see how VS Code is configured to use these tools
-dev = ["cloud-course-project[test,release,static-code-qa,stubs,notebooks,api]"]
+dev = ["cloud-course-project[test,release,static-code-qa,stubs,notebooks,api,aws-lambda]"]
 
 [build-system]
 # Minimum requirements for the build system to execute.
