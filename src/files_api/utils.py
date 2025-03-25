@@ -3,6 +3,7 @@
 from typing import List
 
 from fastapi import status
+from loguru import logger
 
 # try:
 # from files_api.s3.read_objects import object_exists_in_s3
@@ -27,6 +28,7 @@ def object_exists_response(s3_bucket_name: str, file_path: str):
     from files_api.s3.read_objects import object_exists_in_s3  # Is there no better way to avoid circular dependencies?
 
     object_already_exists = object_exists_in_s3(bucket_name=s3_bucket_name, object_key=file_path)
+    logger.debug("object_already_exists_at_path: {exists}", exists=object_already_exists)
 
     if object_already_exists:
         response_message = f"Existing file updated at path: /{file_path}"

@@ -9,7 +9,7 @@ authors = [{ name = "Joseph Fuge", email = "josephfuge1@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
-dependencies = ['boto3', 'fastapi', 'pydantic-settings', 'openai',]
+dependencies = ['boto3', 'fastapi', 'pydantic-settings', 'openai', 'loguru']
 classifiers = ["Programming Language :: Python :: 3"]
 keywords = ["one", "two"]
 
@@ -22,9 +22,9 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
-aws-lambda = ["mangum"]
+aws-lambda = ["mangum", "python-multipart"]
 api = ["uvicorn", "python-multipart", "moto[server]", ]
-stubs = ["boto3-stubs[s3]"]
+stubs = ["boto3-stubs[s3]", "mypy_boto3_s3"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
 test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "python-multipart"]
 release = ["build", "twine"]

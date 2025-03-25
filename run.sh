@@ -73,9 +73,12 @@ function deploy-lambda:cd {
         && pip install \
             --editable /out/[aws-lambda] \
             --target /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python \
-        && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/boto3 \
-        && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/botocore \
         "
+        # && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/boto3 \
+        # && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/botocore \
+        # && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/boto3-* \
+        # && rm -rf /out/${BUILD_DIR_REL_PATH}/${LAMBDA_LAYER_DIR_NAME}/python/botocore-* \
+        # "
 
     # bundle dependencies and handler in a zip file
     cd "$LAMBDA_LAYER_DIR"
@@ -163,6 +166,7 @@ function run-mock {
     # ----- #
 
     # Set AWS endpoint URL and start FastAPI app with uvicorn in the foreground
+    export LOGURU_LEVEL=INFO
     uvicorn files_api.main:create_app --reload
 
     # Wait for the moto.server process to finish (this is optional if you want to keep it running)

@@ -13,6 +13,7 @@ from fastapi import (
     status,
 )
 from fastapi.responses import StreamingResponse
+from loguru import logger
 
 from files_api.genai.create_audio import create_audio_file
 from files_api.genai.create_image import create_image_file
@@ -61,9 +62,12 @@ async def upload_file(request: Request, file_path: str, file: UploadFile, respon
     response_message, status_code = object_exists_response(s3_bucket_name, file_path)
     response.status_code = status_code
 
+    logger.debug("trying to upload file to s3: {file_path}", file_path=file_path)
     upload_s3_object(
         bucket_name=s3_bucket_name, object_key=file_path, file_content=file_contents, content_type=file.content_type
     )
+
+    logger.info(response_message)
 
     return PutFileResponse(file_path=file_path, message=response_message)
 
@@ -77,16 +81,20 @@ async def list_files(
     settings = request.app.state.settings
     s3_bucket_name = settings.s3_bucket_name
     if query_params.page_token:
+        logger.debug("fetching objects metadata using a page_token")
         obj_page = fetch_s3_objects_using_page_token(
             bucket_name=s3_bucket_name, continuation_token=query_params.page_token, max_keys=query_params.page_size
         )
     elif query_params.directory:
+        logger.debug("fetching objects metadata from a specific directory")
         obj_page = fetch_s3_objects_metadata(
             bucket_name=s3_bucket_name, prefix=query_params.directory, max_keys=query_params.page_size
         )
     else:
+        logger.debug("fetching objects metadata")
         obj_page = fetch_s3_objects_metadata(bucket_name=s3_bucket_name, max_keys=query_params.page_size)
 
+    logger.info("fetched {num_objects} objects metadata. Has next page: {has_next_page}", num_objects=len(obj_page[0]), has_next_page=obj_page[1] is not None)
     return GetFilesResponse(
         files=[
             FileMetadata(file_path=file["Key"], last_modified=file["LastModified"], size_bytes=file["Size"])
@@ -133,6 +141,7 @@ async def get_file_metadata(request: Request, file_path: str, response: Response
     s3_bucket_name = settings.s3_bucket_name
 
     object_exists = object_exists_in_s3(bucket_name=settings.s3_bucket_name, object_key=file_path)
+    logger.debug("get_file_metadata object_exists: {obj_exists}", obj_exists=object_exists)
     if not object_exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
 
@@ -142,6 +151,8 @@ async def get_file_metadata(request: Request, file_path: str, response: Response
     response.headers["Content-Type"] = obj["ContentType"]
     response.headers["Content-Length"] = str(obj["ContentLength"])
     response.headers["Last-Modified"] = str(obj["LastModified"])
+
+    logger.info("returning object metadata with type {content_type} and length {content_length}", content_type=response.headers["Content-Type"], content_length=response.headers["Content-Length"])
     return response
 
 
@@ -177,6 +188,7 @@ async def get_file(
     settings: Settings = request.app.state.settings
 
     object_exists = object_exists_in_s3(bucket_name=settings.s3_bucket_name, object_key=file_path)
+    logger.debug("get_file object_exists: {obj_exists}", obj_exists=object_exists)
     if not object_exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
 
@@ -207,6 +219,7 @@ async def delete_file(
     s3_bucket_name = settings.s3_bucket_name
 
     object_exists = object_exists_in_s3(bucket_name=s3_bucket_name, object_key=file_path)
+    logger.debug("delete_file object_exists: {obj_exists}", obj_exists=object_exists)
     if not object_exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found: {file_path}")
 
@@ -227,8 +240,9 @@ async def create_file(request: Request, prompt: str, response: Response, query_p
 
     response_message, response.status_code = object_exists_response(s3_bucket_name, query_params.file_path)
 
+
+    logger.debug("create_file file_type: {file_type}", file_type=query_params.file_type)
     if query_params.file_type == "text":
-        print("creating a text file...")
         file_contents: bytes = await create_text_file(prompt)
         content_type = "text/plain"
     elif query_params.file_type == "image":
@@ -247,6 +261,8 @@ async def create_file(request: Request, prompt: str, response: Response, query_p
             bucket_name=s3_bucket_name, object_key=query_params.file_path, file_content=file_contents, content_type=content_type
         )
 
+        logger.info("file created and uploaded to s3 at {obj_key}", obj_key=query_params.file_path)
         return PutFileResponse(file_path=query_params.file_path, message=response_message)
     else:
+        logger.error("failed to create file of type {obj_type} at {obj_key}", obj_type=query_params.file_type, obj_key=query_params.file_path)
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE)

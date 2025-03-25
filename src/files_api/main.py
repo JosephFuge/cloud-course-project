@@ -1,11 +1,10 @@
 """Initialize FastAPI REST API app."""
 
-import os
 from textwrap import dedent
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.routing import APIRoute
-from pydantic import ValidationError
 
 from files_api.errors import (
     handle_broad_exceptions,
@@ -40,13 +39,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         """
         ),
         docs_url="/",  # its easier to find the docs when they live on the base url
+        root_path="/prod",
         generate_unique_id_function=custom_generate_unique_id,
     )
     app.state.settings = settings
     app.include_router(ROUTER)
     app.include_router(GENERATE_ROUTER)
 
-    app.add_exception_handler(exc_class_or_status_code=ValidationError, handler=handle_pydantic_validation_errors)
+    app.add_exception_handler(exc_class_or_status_code=RequestValidationError(), handler=handle_pydantic_validation_errors)
 
     app.middleware("http")(handle_broad_exceptions)
 
