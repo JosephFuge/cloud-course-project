@@ -22,11 +22,12 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
+docker = ["python-multipart"]
 aws-lambda = ["mangum", "python-multipart"]
 api = ["uvicorn", "python-multipart", "moto[server]", ]
 stubs = ["boto3-stubs[s3]", "mypy_boto3_s3"]
 notebooks =["jupyterlab", "ipykernel", "rich"]
-test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "python-multipart"]
+test = ["pytest", "pytest-cov", "moto[s3]", "httpx", "python-multipart", "locust"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",
@@ -43,7 +44,7 @@ static-code-qa = [
 # - automatically apply formatting
 # - show enhanced autocompletion for stubs libraries
 # See .vscode/settings.json to see how VS Code is configured to use these tools
-dev = ["cloud-course-project[test,release,static-code-qa,stubs,notebooks,api,aws-lambda]"]
+dev = ["cloud-course-project[test,release,static-code-qa,stubs,notebooks,api,aws-lambda,docker]"]
 
 [build-system]
 # Minimum requirements for the build system to execute.

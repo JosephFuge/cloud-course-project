@@ -174,6 +174,27 @@ function run-mock {
     wait $OPENAI_MOCK_PID
 }
 
+function set-local-aws-env-vars {
+    export AWS_PROFILE=cloud-course
+    export AWS_REGION=us-west-2
+}
+
+function run-locust {
+    set-local-aws-env-vars
+    aws configure export-credentials --profile $AWS_PROFILE --format env > .env
+    docker compose \
+        --file docker-compose.yaml \
+        --file docker-compose.locust.yaml \
+        up \
+        --build
+}
+
+function run-docker {
+    set-local-aws-env-vars
+    aws configure export-credentials --profile $AWS_PROFILE --format env > .env
+    docker compose up --build
+}
+
 # run linting, formatting, and other static code quality tools
 function lint {
     pre-commit run --all-files

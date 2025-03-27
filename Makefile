@@ -31,6 +31,12 @@ run:
 run-mock:
 	bash run.sh run-mock
 
+run-locust:
+	bash run.sh run-locust
+
+run-docker:
+	bash run.sh run-docker
+
 lint:
 	bash run.sh lint
 
