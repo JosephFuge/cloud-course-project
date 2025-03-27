@@ -1,5 +1,6 @@
 import json
 import sys
+import traceback
 
 import loguru
 from fastapi import (
@@ -14,7 +15,7 @@ def configure_logger():
     logger.add(
         sink=sys.stdout,
         diagnose=False,
-        format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <bold><white>{message}</white></bold> | <dim>{extra}</dim>",
+        format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <bold><white>{message}</white></bold> | <dim>{extra}</dim> {stacktrace}",
         filter=process_log_record,
     )
 
@@ -23,8 +24,23 @@ def process_log_record(record: "loguru.Record") -> "loguru.Record":
 
     if extra:
         record["extra"] = json.dumps(extra, default=str) # type: ignore
+    
+    record["stacktrace"] = "" # type: ignore
+    if record["exception"]:
+        err = record["exception"]
+        stacktrace = get_formatted_stacktrace(err, replace_newline_character_with_carriage_return=True)
+        record["stacktrace"] = stacktrace # type: ignore
         
     return record
+
+def get_formatted_stacktrace(loguru_record_exception, replace_newline_character_with_carriage_return: bool) -> str:
+    """Get the formatted stacktrace for the current exception."""
+    exc_type, exc_value, exc_traceback = loguru_record_exception
+    stacktrace_: list[str] = traceback.format_exception(exc_type, exc_value, exc_traceback)
+    stacktrace: str = "".join(stacktrace_)
+    if replace_newline_character_with_carriage_return:
+        stacktrace = stacktrace.replace("\n", "\r")
+    return stacktrace
 
 def log_request_info(request: Request):
     """Log the request info."""
@@ -49,9 +65,3 @@ def log_response_info(response: Response):
         "headers": dict(response.headers.items()),
     }
     logger.debug("Response sent", http_response=response_info)
-
-async def log_request_and_response_info(request: Request, call_next):
-    log_request_info(request)
-    response = await call_next(request)
-    log_response_info(response)
-    return response

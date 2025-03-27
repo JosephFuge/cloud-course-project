@@ -10,7 +10,7 @@ from files_api.errors import (
     handle_broad_exceptions,
     handle_pydantic_validation_errors,
 )
-from files_api.monitoring.logger import log_request_and_response_info
+from files_api.route_handler import RouteHandler
 from files_api.routes import (
     GENERATE_ROUTER,
     ROUTER,
@@ -44,13 +44,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         generate_unique_id_function=custom_generate_unique_id,
     )
     app.state.settings = settings
+    app.router.route_class = RouteHandler
     app.include_router(ROUTER)
     app.include_router(GENERATE_ROUTER)
 
     app.add_exception_handler(exc_class_or_status_code=RequestValidationError, handler=handle_pydantic_validation_errors)
 
     app.middleware("http")(handle_broad_exceptions)
-    app.middleware("http")(log_request_and_response_info)
 
     return app
 
